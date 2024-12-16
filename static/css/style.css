@@ -9,6 +9,8 @@ html {
     font-size: 62.5%;
     /* This sets 1rem = 10px */
     box-sizing: border-box;
+    background-image: url(../images/top-view-table-full-food.jpg);
+    background-size: cover;
 }
 
 body {
@@ -18,7 +20,6 @@ body {
     line-height: 1.6;
     height: 100vh;
     overscroll-behavior-y: none;
-    background-color: #F8F8F8;
     padding: 2.5rem 3.5rem;
     display: flex;
     flex-direction: column;
@@ -26,7 +27,7 @@ body {
 }
 
 .header {
-    background-color: #FFFFFF;
+    background-color: #d05c5c;
     padding: 1.2rem 2.5rem;
     border-radius: 15px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);

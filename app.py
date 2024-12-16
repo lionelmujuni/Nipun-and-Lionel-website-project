@@ -1,7 +1,9 @@
+import os
 from flask import Flask, request, jsonify, render_template
 import requests
-import os
 from dotenv import load_dotenv
+from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
 
 # Load environment variables
 load_dotenv()
