@@ -181,7 +181,6 @@ class RecipeManager {
     }
 }
 
-// Initialize recipe manager when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new RecipeManager();
 });
