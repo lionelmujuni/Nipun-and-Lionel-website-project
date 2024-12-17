@@ -1,4 +1,3 @@
-// Add at the beginning of your script.js file
 const WEATHER_API_KEY = '53acbccdccbb46dcbdd65d17a45a988e';
 
 // Map functionality
@@ -140,7 +139,6 @@ class App {
                 let currentPage = 1;
 
                 const displayPage = (page) => {
-                    // Clear current list
                     restaurantsList.innerHTML = '';
 
                     // Calculate start and end indices
@@ -149,7 +147,7 @@ class App {
 
                     // Display restaurants for current page
                     data.restaurants.slice(start, end).forEach((restaurant, index) => {
-                        const absoluteIndex = start + index; // Index in the full array
+                        const absoluteIndex = start + index;
                         const html = `
                             <li class="restaurant__item" data-index="${absoluteIndex}">
                                 <h3 class="restaurant__name">${restaurant.name}</h3>
