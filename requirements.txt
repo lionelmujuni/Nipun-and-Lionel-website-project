@@ -8,3 +8,4 @@ requests
 python-dotenv
 Flask-Migrate==4.0.5
 alembic==1.13.1
+gunicorn
