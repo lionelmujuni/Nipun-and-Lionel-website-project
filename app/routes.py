@@ -2,8 +2,10 @@ import requests
 from flask import render_template, redirect, url_for, flash, request, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from app import app, db, bcrypt, login_manager
-from app.models import User, FavouriteRecipe
+from app.models import User, BookmarkedRecipe, BookmarkedRestaurant
 from app.config import YELP_API_KEY, YELP_BASE_URL
+from app.spoonacular_api import search_recipes
+import json
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -122,25 +124,160 @@ def eat_out():
 @login_required
 def eat_at_home():
     recipes = []
+    bookmarked_recipes = []
+    
+    # Get user's bookmarked recipes from database
+    if current_user.is_authenticated:
+        try:
+            bookmarked = db.session.query(BookmarkedRecipe)\
+                .join(User)\
+                .filter(User.id == current_user.id)\
+                .all()
+            bookmarked_recipes = [{
+                'title': b.title,
+                'description': b.description,
+                'readyInMinutes': b.ready_in_minutes,
+                'servings': b.servings,
+                'url': b.source_url
+            } for b in bookmarked]
+        except Exception as e:
+            print(f"Error fetching bookmarks: {e}")
+
     if request.method == 'POST':
-        query = request.form['query']
-        # For now, return empty recipes until we implement a recipe API
-        flash('Recipe search functionality coming soon!', 'info')
-    return render_template('recipes.html', recipes=recipes)
+        query = request.form.get('query')
+        if query:
+            try:
+                result = search_recipes(query)
+                recipes = result.get('recipes', [])
+            except Exception as e:
+                print(f"\nError fetching recipes: {e}")
+                flash('Failed to fetch recipes. Please try again.', 'error')
+    
+    return render_template('recipes.html', recipes=recipes, bookmarked_recipes=bookmarked_recipes)
 
 @app.route('/bookmark_recipe', methods=['POST'])
 @login_required
 def bookmark_recipe():
-    data = request.get_json()
-    new_recipe = FavouriteRecipe(
-        user_id=current_user.id,
-        title=data['title'],
-        description=data.get('description'),
-        image_url=data.get('image_url')
-    )
-    db.session.add(new_recipe)
-    db.session.commit()
-    return jsonify({'message': 'Recipe bookmarked successfully.'}), 200
+    try:
+        data = request.get_json()
+        
+        # Check if recipe is already bookmarked
+        existing_bookmark = BookmarkedRecipe.query.filter_by(
+            user_id=current_user.id,
+            title=data['title']
+        ).first()
+        
+        if existing_bookmark:
+            db.session.delete(existing_bookmark)
+            db.session.commit()
+            return jsonify({'message': 'Bookmark removed', 'action': 'removed'}), 200
+        
+        # Create new bookmark
+        new_bookmark = BookmarkedRecipe(
+            user_id=current_user.id,
+            title=data['title'],
+            description=data.get('description', ''),
+            ready_in_minutes=data.get('readyInMinutes'),
+            servings=data.get('servings'),
+            source_url=data.get('url')
+        )
+        
+        db.session.add(new_bookmark)
+        db.session.commit()
+        
+        return jsonify({'message': 'Recipe bookmarked successfully', 'action': 'added'}), 200
+        
+    except Exception as e:
+        print(f"Error bookmarking recipe: {str(e)}")
+        return jsonify({'error': 'Failed to bookmark recipe'}), 500
+
+@app.route('/get_bookmarked_recipes')
+@login_required
+def get_bookmarked_recipes():
+    try:
+        bookmarks = db.session.query(BookmarkedRecipe)\
+            .join(User)\
+            .filter(User.id == current_user.id)\
+            .all()
+        return jsonify({
+            'bookmarks': [{
+                'title': b.title,
+                'description': b.description,
+                'readyInMinutes': b.ready_in_minutes,
+                'servings': b.servings,
+                'url': b.source_url
+            } for b in bookmarks]
+        }), 200
+    except Exception as e:
+        print(f"Error fetching bookmarks: {str(e)}")
+        return jsonify({'error': 'Failed to fetch bookmarks'}), 500
+
+@app.route('/bookmark_restaurant', methods=['POST'])
+@login_required
+def bookmark_restaurant():
+    try:
+        data = request.get_json()
+        
+        # Check if restaurant is already bookmarked
+        existing_bookmark = BookmarkedRestaurant.query.filter_by(
+            user_id=current_user.id,
+            name=data['name']
+        ).first()
+        
+        if existing_bookmark:
+            db.session.delete(existing_bookmark)
+            db.session.commit()
+            return jsonify({'message': 'Bookmark removed', 'action': 'removed'}), 200
+        
+        # Create new bookmark
+        new_bookmark = BookmarkedRestaurant(
+            user_id=current_user.id,
+            name=data['name'],
+            description=data.get('description', ''),
+            rating=data.get('rating'),
+            review_count=data.get('review_count'),
+            price=data.get('price'),
+            address=data.get('address'),
+            latitude=data.get('coordinates', {}).get('lat'),
+            longitude=data.get('coordinates', {}).get('lng'),
+            yelp_url=data.get('url')
+        )
+        
+        db.session.add(new_bookmark)
+        db.session.commit()
+        
+        return jsonify({'message': 'Restaurant bookmarked successfully', 'action': 'added'}), 200
+        
+    except Exception as e:
+        print(f"Error bookmarking restaurant: {str(e)}")
+        return jsonify({'error': 'Failed to bookmark restaurant'}), 500
+
+@app.route('/get_bookmarked_restaurants')
+@login_required
+def get_bookmarked_restaurants():
+    try:
+        bookmarks = db.session.query(BookmarkedRestaurant)\
+            .join(User)\
+            .filter(User.id == current_user.id)\
+            .all()
+        return jsonify({
+            'bookmarks': [{
+                'name': b.name,
+                'description': b.description,
+                'rating': b.rating,
+                'review_count': b.review_count,
+                'price': b.price,
+                'address': b.address,
+                'coordinates': {
+                    'lat': b.latitude,
+                    'lng': b.longitude
+                },
+                'url': b.yelp_url
+            } for b in bookmarks]
+        }), 200
+    except Exception as e:
+        print(f"Error fetching restaurant bookmarks: {str(e)}")
+        return jsonify({'error': 'Failed to fetch bookmarks'}), 500
 
 @app.route('/logout', methods=['POST'])
 @login_required

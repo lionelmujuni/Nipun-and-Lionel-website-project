@@ -6,6 +6,7 @@ class App {
     #map;
     #mapZoomLevel = 13;
     #markers = [];
+    bookmarks = [];
 
     constructor() {
         // Get user's position
@@ -86,6 +87,7 @@ class App {
 
                 // Create markers for all restaurants
                 data.restaurants.forEach((restaurant, index) => {
+                    const isBookmarked = this.bookmarks.some(b => b.name === restaurant.name);
                     const marker = L.marker([
                         restaurant.coordinates.lat,
                         restaurant.coordinates.lng
@@ -105,8 +107,10 @@ class App {
                             <div class="popup__header">
                                 <h3>${restaurant.name}</h3>
                                 ${document.body.dataset.authenticated === 'true' ? `
-                                    <button class="popup__bookmark" data-restaurant="${encodeURIComponent(JSON.stringify(restaurant))}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="popup__bookmark-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <button class="popup__bookmark ${isBookmarked ? 'popup__bookmark--active' : ''}" 
+                                        data-restaurant="${encodeURIComponent(JSON.stringify(restaurant))}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="popup__bookmark-icon" fill="none" 
+                                            viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                                 d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                                         </svg>
@@ -246,63 +250,87 @@ class App {
         });
     }
 
-    _initializeBookmarkHandlers() {
-        // Get stored bookmarks or initialize empty array
-        this.bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+    async _initializeBookmarkHandlers() {
+        // Load bookmarks from database
+        if (document.body.dataset.authenticated === 'true') {
+            try {
+                const response = await fetch('/get_bookmarked_restaurants');
+                const data = await response.json();
+                if (data.bookmarks) {
+                    this.bookmarks = data.bookmarks;
+                    this._updateBookmarksList();
+                }
+            } catch (err) {
+                console.error('Error loading bookmarks:', err);
+            }
+        }
 
-        // Add event delegation for bookmark buttons
-        document.addEventListener('click', e => {
+        document.addEventListener('click', async e => {
             const bookmarkBtn = e.target.closest('.popup__bookmark');
             const removeBtn = e.target.closest('.bookmark__remove');
 
             if (bookmarkBtn) {
                 const restaurantData = JSON.parse(decodeURIComponent(bookmarkBtn.dataset.restaurant));
+                try {
+                    const response = await fetch('/bookmark_restaurant', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(restaurantData)
+                    });
 
-                // Check if restaurant is already bookmarked
-                const bookmarkIndex = this.bookmarks.findIndex(
-                    bookmark => bookmark.name === restaurantData.name
-                );
+                    const data = await response.json();
+                    if (response.ok) {
+                        // Toggle the active class based on the action
+                        if (data.action === 'added') {
+                            bookmarkBtn.classList.add('popup__bookmark--active');
+                        } else {
+                            bookmarkBtn.classList.remove('popup__bookmark--active');
+                        }
 
-                // Toggle bookmark
-                if (bookmarkIndex === -1) {
-                    // Add bookmark
-                    this.bookmarks.push(restaurantData);
-                    bookmarkBtn.classList.add('popup__bookmark--active');
-                } else {
-                    // Remove bookmark
-                    this.bookmarks.splice(bookmarkIndex, 1);
-                    bookmarkBtn.classList.remove('popup__bookmark--active');
+                        // Refresh bookmarks from server
+                        const bookmarksResponse = await fetch('/get_bookmarked_restaurants');
+                        const bookmarksData = await bookmarksResponse.json();
+                        this.bookmarks = bookmarksData.bookmarks;
+                        this._updateBookmarksList();
+                    }
+                } catch (err) {
+                    console.error('Error:', err);
+                    alert('Failed to bookmark restaurant. Please try again.');
                 }
-
-                // Save to localStorage
-                localStorage.setItem('bookmarks', JSON.stringify(this.bookmarks));
-
-                // Update bookmarks list
-                this._updateBookmarksList();
             }
 
             if (removeBtn) {
                 const restaurantData = JSON.parse(decodeURIComponent(removeBtn.dataset.restaurant));
+                try {
+                    const response = await fetch('/bookmark_restaurant', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(restaurantData)
+                    });
 
-                // Remove from bookmarks
-                const bookmarkIndex = this.bookmarks.findIndex(
-                    bookmark => bookmark.name === restaurantData.name
-                );
+                    const data = await response.json();
+                    if (response.ok) {
+                        // Refresh bookmarks from server
+                        const bookmarksResponse = await fetch('/get_bookmarked_restaurants');
+                        const bookmarksData = await bookmarksResponse.json();
+                        this.bookmarks = bookmarksData.bookmarks;
+                        this._updateBookmarksList();
 
-                if (bookmarkIndex !== -1) {
-                    this.bookmarks.splice(bookmarkIndex, 1);
-
-                    // Update localStorage
-                    localStorage.setItem('bookmarks', JSON.stringify(this.bookmarks));
-
-                    // Update bookmarks list
-                    this._updateBookmarksList();
-
-                    // Update popup button if it exists
-                    const popup = document.querySelector(`.popup__bookmark[data-restaurant="${encodeURIComponent(JSON.stringify(restaurantData))}"]`);
-                    if (popup) {
-                        popup.classList.remove('popup__bookmark--active');
+                        // Update popup button if it exists
+                        const popup = document.querySelector(
+                            `.popup__bookmark[data-restaurant="${encodeURIComponent(JSON.stringify(restaurantData))}"]`
+                        );
+                        if (popup) {
+                            popup.classList.remove('popup__bookmark--active');
+                        }
                     }
+                } catch (err) {
+                    console.error('Error:', err);
+                    alert('Failed to remove bookmark. Please try again.');
                 }
             }
         });
@@ -310,6 +338,7 @@ class App {
 
     _updateBookmarksList() {
         const bookmarksList = document.querySelector('.bookmarks__list');
+        if (!bookmarksList) return;
 
         if (this.bookmarks.length === 0) {
             bookmarksList.innerHTML = `
@@ -320,9 +349,7 @@ class App {
                                 d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
-                    <p class="message__text">
-                        No bookmarks yet. Find a nice restaurant and bookmark it :)
-                    </p>
+                    <p class="message__text">No bookmarks yet. Find a nice restaurant and bookmark it :)</p>
                 </div>
             `;
             return;

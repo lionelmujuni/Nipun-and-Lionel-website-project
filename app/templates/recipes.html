@@ -132,6 +132,359 @@
         }
 
         /* Reuse existing styles from style.css for header actions */
+
+        .recipe-link {
+            color: #FF4C4C;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .recipe-link:hover {
+            color: #ff3333;
+            text-decoration: underline;
+        }
+
+        .bookmark__item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f1f1f1;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bookmark__item:hover {
+            background-color: #f8f8f8;
+        }
+
+        .bookmark__content {
+            flex: 1;
+        }
+
+        .bookmark__name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: #333;
+        }
+
+        .bookmark__details {
+            display: flex;
+            gap: 1rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem;
+            border-top: 1px solid #f1f1f1;
+        }
+
+        .pagination-btn {
+            background: none;
+            border: none;
+            color: rgba(208, 92, 92, 1);
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .pagination-btn[disabled] {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn[disabled]:hover {
+            transform: none;
+        }
+
+        .pagination-info {
+            font-size: 1.4rem;
+            color: #666;
+        }
+
+        .recipe-details {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .recipe-details__title {
+            font-size: 2.4rem;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .recipe-details__content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .recipe-details__description {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .recipe-details__link {
+            display: inline-block;
+            background-color: rgba(208, 92, 92, 1);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .recipe-details__link:hover {
+            background-color: rgba(188, 72, 72, 1);
+            transform: translateY(-2px);
+        }
+
+        .bookmark__item--active {
+            background-color: #f8f8f8;
+            border-left: 4px solid rgba(208, 92, 92, 1);
+        }
+
+        .recipes__list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .recipe__item {
+            padding: 2rem;
+            border-bottom: 1px solid #f1f1f1;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .recipe__item:hover {
+            background-color: #f8f8f8;
+        }
+
+        .recipe__name {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .recipe__details {
+            padding: 0.5rem 0;
+        }
+
+        .recipe-details {
+            padding: 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .recipe-details__image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .recipe-details__actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .bookmark-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: 2px solid rgba(208, 92, 92, 1);
+            color: rgba(208, 92, 92, 1);
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .bookmark-button:hover {
+            background-color: rgba(208, 92, 92, 1);
+            color: white;
+        }
+
+        .bookmark-icon {
+            width: 1.6rem;
+            height: 1.6rem;
+        }
+
+        .message__error {
+            color: #dc3545;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .header__actions {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .header__bookmarks {
+            position: relative;
+        }
+
+        .bookmark__button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .bookmark__icon {
+            width: 2.4rem;
+            height: 2.4rem;
+            color: white;
+        }
+
+        .bookmarks {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+            width: 300px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .bookmarks__list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-menu__button {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 0.8rem 1.6rem;
+            border-radius: 100px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .user-menu__button:hover {
+            background-color: white;
+            color: rgba(208, 92, 92, 1);
+        }
+
+        .user-menu__icon {
+            width: 1.6rem;
+            height: 1.6rem;
+        }
+
+        .user-menu__dropdown {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 1rem);
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            z-index: 1000;
+        }
+
+        .user-menu__item {
+            display: block;
+            padding: 1.2rem 1.6rem;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .user-menu__item:hover {
+            background-color: #f8f8f8;
+        }
+
+        .user-menu__logout {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 1.4rem;
+            color: #FF4C4C;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .user-menu__logout:hover {
+            background-color: #f8f8f8;
+        }
+
+        .bookmark-button--active {
+            background-color: rgba(208, 92, 92, 1);
+            color: white;
+        }
+
+        .bookmark-button--active:hover {
+            background-color: rgba(188, 72, 72, 1);
+        }
+
+        .auth-link {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 0.8rem 1.6rem;
+            border-radius: 100px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .auth-link:hover {
+            background-color: white;
+            color: rgba(208, 92, 92, 1);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 
@@ -142,7 +495,8 @@
         </div>
 
         <div class="header__search">
-            <form action="/eat_at_home" method="POST" class="search-form" style="display: flex; flex: 1; gap: 1rem;">
+            <form action="/eat_at_home" method="POST" class="search-form main-search"
+                style="display: flex; flex: 1; gap: 1rem;">
                 <input type="text" name="query" class="search__input" placeholder="Search for recipes..." required>
                 <button type="submit" class="search__button">
                     <svg xmlns="http://www.w3.org/2000/svg" class="search__icon" fill="none" viewBox="0 0 24 24"
@@ -206,41 +560,37 @@
 
     <div class="content">
         <div class="sidebar">
+            {% if recipes %}
+            <ul class="recipes__list">
+                {% for recipe in recipes %}
+                <li class="recipe__item" data-index="{{ loop.index0 }}">
+                    <div class="recipe__details">
+                        <h3 class="recipe__name">{{ recipe.title }}</h3>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
             <div class="message">
+                <div class="message__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="smile__icon" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
                 <p class="message__text">
-                    No bookmarked recipes yet. Search and bookmark your favorite recipes :)
+                    Search for recipes to get started!
                 </p>
             </div>
+            {% endif %}
         </div>
 
         <div class="recipes-grid">
             {% if recipes %}
-            {% for recipe in recipes %}
-            <div class="recipe-card">
-                {% if recipe.image_url %}
-                <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" class="recipe-image">
-                {% endif %}
-                <div class="recipe-content">
-                    <h3 class="recipe-title">{{ recipe.title }}</h3>
-                    <p class="recipe-description">{{ recipe.description }}</p>
-                    {% if current_user.is_authenticated %}
-                    <form action="/bookmark_recipe" method="POST" class="bookmark-form">
-                        <input type="hidden" name="title" value="{{ recipe.title }}">
-                        <input type="hidden" name="description" value="{{ recipe.description }}">
-                        <input type="hidden" name="image_url" value="{{ recipe.image_url }}">
-                        <button type="submit" class="bookmark-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="bookmark-icon" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                            </svg>
-                            Bookmark
-                        </button>
-                    </form>
-                    {% endif %}
-                </div>
+            <div class="message">
+                <p class="message__text">Select a recipe to view details</p>
             </div>
-            {% endfor %}
             {% else %}
             <div class="message">
                 <p class="message__text">Search for recipes to get started!</p>
@@ -250,6 +600,47 @@
     </div>
 
     <script defer src="../static/js/recipes.js"></script>
+    <script>
+        window.initialRecipes = {{ recipes | tojson | safe }};
+        window.initialBookmarks = {{ bookmarked_recipes | tojson | safe }};
+        console.log('Initial recipes from template:', window.initialRecipes);
+        console.log('Initial bookmarks from template:', window.initialBookmarks);
+
+        // Initialize dropdown functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            // Bookmark dropdown
+            const bookmarkBtn = document.querySelector('.bookmark__button');
+            const bookmarksDropdown = document.querySelector('.bookmarks');
+
+            if (bookmarkBtn && bookmarksDropdown) {
+                bookmarkBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    bookmarksDropdown.classList.toggle('hidden');
+                });
+            }
+
+            // User menu dropdown
+            const userMenuButton = document.querySelector('.user-menu__button');
+            const userMenuDropdown = document.querySelector('.user-menu__dropdown');
+
+            if (userMenuButton && userMenuDropdown) {
+                userMenuButton.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    userMenuDropdown.classList.toggle('hidden');
+                });
+            }
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function (e) {
+                if (bookmarksDropdown && !bookmarkBtn?.contains(e.target)) {
+                    bookmarksDropdown.classList.add('hidden');
+                }
+                if (userMenuDropdown && !userMenuButton?.contains(e.target)) {
+                    userMenuDropdown.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
