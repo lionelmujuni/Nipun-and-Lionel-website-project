@@ -7,7 +7,6 @@
 
 html {
     font-size: 62.5%;
-    /* This sets 1rem = 10px */
     box-sizing: border-box;
     background-image: url(../images/top-view-table-full-food.jpg);
     background-size: cover;
@@ -30,6 +29,7 @@ body {
     background-color: rgba(208, 92, 92, 1);
     padding: 2rem 5rem;
     display: flex;
+    border-radius: 20px;
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
@@ -183,7 +183,7 @@ body {
     gap: 4rem;
 }
 
-/* GENERAL */
+/* Links */
 a:link,
 a:visited {
     color: #FF4C4C;
