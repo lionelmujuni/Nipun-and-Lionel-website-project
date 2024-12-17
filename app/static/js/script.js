@@ -40,6 +40,8 @@ class App {
                     alert('Could not get your position');
                 }
             );
+        }  else {
+            alert('Geolocation is not supported by your browser.');
         }
     }
 
@@ -64,7 +66,7 @@ class App {
                 return;
             }
 
-            const response = await fetch(`/api/restaurants?city=${encodeURIComponent(cityName)}`);
+            const response = await fetch(`/api/restaurants?city=${cityName}`);
             const data = await response.json();
 
             if (data.restaurants) {

@@ -1,0 +1,20 @@
+<form action="/eat_at_home" method="POST">
+    <label for="query">Search Recipes:</label>
+    <input type="text" id="query" name="query" required>
+    <button type="submit">Search</button>
+</form>
+<div>
+    {% for recipe in recipes %}
+        <div>
+            <h3>{{ recipe.title }}</h3>
+            <p>{{ recipe.description }}</p>
+            <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}">
+            <form action="/bookmark_recipe" method="POST">
+                <input type="hidden" name="title" value="{{ recipe.title }}">
+                <input type="hidden" name="description" value="{{ recipe.description }}">
+                <input type="hidden" name="image_url" value="{{ recipe.image_url }}">
+                <button type="submit">Bookmark</button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
