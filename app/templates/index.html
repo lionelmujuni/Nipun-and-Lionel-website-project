@@ -19,12 +19,11 @@
   <title>Map your Food Cravings</title>
 </head>
 
-<body>
+<body data-authenticated="{{ current_user.is_authenticated|tojson|safe }}">
   <div class="header">
     <div class="header__logo">
       <img src="../static/images/logo2.png" alt="Logo" class="logo" />
     </div>
-    <a href="/verify_email">Log in or Sign up</a>
     <div class="header__search">
       <input type="text" class="search__input" placeholder="Enter city name" />
       <button class="search__button">
@@ -35,31 +34,54 @@
         </svg>
       </button>
     </div>
-    <div class="header__bookmarks">
-      <button class="bookmark__button">
-        <svg xmlns="http://www.w3.org/2000/svg" class="bookmark__icon" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-        </svg>
-      </button>
 
-      <div class="bookmarks hidden">
-        <ul class="bookmarks__list">
-          <div class="message">
-            <div class="message__icon">
-              <svg xmlns="http://www.w3.org/2000/svg" class="smile__icon" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+    <div class="header__actions">
+      {% if current_user.is_authenticated %}
+      <div class="header__bookmarks">
+        <button class="bookmark__button">
+          <svg xmlns="http://www.w3.org/2000/svg" class="bookmark__icon" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+          </svg>
+        </button>
+
+        <div class="bookmarks hidden">
+          <ul class="bookmarks__list">
+            <div class="message">
+              <div class="message__icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="smile__icon" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <p class="message__text">
+                No bookmarks yet. Find a nice restaurant and bookmark it :)
+              </p>
             </div>
-            <p class="message__text">
-              No bookmarks yet. Find a nice restaurant and bookmark it :)
-            </p>
-          </div>
-        </ul>
+          </ul>
+        </div>
       </div>
+
+      <div class="user-menu">
+        <button class="user-menu__button">
+          {{ current_user.name }}
+          <svg xmlns="http://www.w3.org/2000/svg" class="user-menu__icon" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div class="user-menu__dropdown hidden">
+          <a href="/dashboard" class="user-menu__item">Dashboard</a>
+          <form action="/logout" method="POST" class="user-menu__item">
+            <button type="submit" class="user-menu__logout">Logout</button>
+          </form>
+        </div>
+      </div>
+      {% else %}
+      <a href="/verify_email" class="auth-link">Login / Sign up</a>
+      {% endif %}
     </div>
   </div>
 

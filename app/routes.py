@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, flash, request, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from app import app, db, bcrypt, login_manager
 from app.models import User, FavouriteRecipe
-from app.__init__ import fs, YELP_API_KEY, YELP_BASE_URL
+from app.config import YELP_API_KEY, YELP_BASE_URL
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -79,6 +79,7 @@ def verify_email():
         email = request.form['email']
         user = User.query.filter_by(email=email).first()
         if user:
+            flash('Welcome back! Please login to continue.', 'info')
             return redirect(url_for('login', email=email))
         else:
             return redirect(url_for('register', email=email))
@@ -93,7 +94,6 @@ def register():
         user = User(name=name, email=email, password=password)
         db.session.add(user)
         db.session.commit()
-        flash('Account created successfully. Please log in.', 'success')
         return redirect(url_for('login'))
     return render_template('register.html')
 
@@ -106,8 +106,6 @@ def login():
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
             return redirect(url_for('dashboard'))
-        else:
-            flash('Login unsuccessful. Please check your credentials.', 'danger')
     return render_template('login.html')
 
 @app.route('/dashboard')
@@ -126,17 +124,8 @@ def eat_at_home():
     recipes = []
     if request.method == 'POST':
         query = request.form['query']
-        try:
-            # Search for recipes using the Fatsecret API
-            search_results = fs.recipes.search(query)
-            for recipe in search_results:
-                recipes.append({
-                    'title': recipe['recipe_name'],
-                    'description': recipe.get('recipe_description', 'No description available.'),
-                    'image_url': recipe.get('recipe_image', 'default_image_url')  
-                })
-        except Exception as e:
-            flash(f'An error occurred while searching for recipes: {e}', 'danger')
+        # For now, return empty recipes until we implement a recipe API
+        flash('Recipe search functionality coming soon!', 'info')
     return render_template('recipes.html', recipes=recipes)
 
 @app.route('/bookmark_recipe', methods=['POST'])
@@ -152,3 +141,9 @@ def bookmark_recipe():
     db.session.add(new_recipe)
     db.session.commit()
     return jsonify({'message': 'Recipe bookmarked successfully.'}), 200
+
+@app.route('/logout', methods=['POST'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))

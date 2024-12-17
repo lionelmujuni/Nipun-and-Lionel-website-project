@@ -1,6 +1,154 @@
-<h1>Welcome, {{ current_user.name }}</h1>
-<a href="/eat_out">Eat Out</a>
-<a href="/eat_at_home">Eat at Home</a>
-<form action="/logout" method="POST">
-    <button type="submit">Logout</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" type="image/png" href="../static/images/logo2.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <title>Dashboard - Craveio</title>
+
+    <style>
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .dashboard-header {
+            background-color: #FFFFFF;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-text {
+            font-size: 2.4rem;
+            color: #333333;
+            font-weight: 700;
+        }
+
+        .logout-form {
+            display: inline-block;
+        }
+
+        .dashboard-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .option-card {
+            background-color: #FFFFFF;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-icon {
+            width: 6rem;
+            height: 6rem;
+            margin-bottom: 2rem;
+            color: #FF4C4C;
+        }
+
+        .option-title {
+            font-size: 2rem;
+            color: #333333;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .option-description {
+            font-size: 1.4rem;
+            color: #666666;
+            margin-bottom: 2rem;
+        }
+
+        .option-link {
+            display: inline-block;
+            background-color: #FF4C4C;
+            color: black;
+            text-decoration: none;
+            padding: 1.2rem 2.4rem;
+            border-radius: 8px;
+            font-size: 1.6rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .option-link:hover {
+            background-color: #ff3333;
+            transform: translateY(-2px);
+            color: black;
+        }
+
+        .logout-button {
+            background-color: #f8f8f8;
+            color: #FF4C4C;
+            border: 2px solid #FF4C4C;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-button:hover {
+            background-color: #FF4C4C;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="welcome-text">Welcome, {{ current_user.name }}</h1>
+            <form action="/logout" method="POST" class="logout-form">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+
+        <div class="dashboard-options">
+            <div class="option-card">
+                <svg xmlns="http://www.w3.org/2000/svg" class="option-icon" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <h2 class="option-title">Eat Out</h2>
+                <p class="option-description">Find and explore restaurants near you</p>
+                <a href="/eat_out" class="option-link">Explore Restaurants</a>
+            </div>
+
+            <div class="option-card">
+                <svg xmlns="http://www.w3.org/2000/svg" class="option-icon" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <h2 class="option-title">Eat at Home</h2>
+                <p class="option-description">Discover recipes to cook at home</p>
+                <a href="/eat_at_home" class="option-link">Browse Recipes</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

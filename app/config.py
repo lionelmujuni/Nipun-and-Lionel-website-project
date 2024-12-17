@@ -1,0 +1,2 @@
+YELP_API_KEY = 'prL-BhV54opcGo6NqoHEqhAa8zdmnGWn1D3LjCH2nTgB9tNu8wvTrDbiE-Ju-VWeocXAHEkdXCCa0T4_urgKw4eVQkTJYj37P43C1GUpJElfx0Z1fNH53V8kIyxZZ3Yx'
+YELP_BASE_URL = 'https://api.yelp.com/v3/businesses/search' 
